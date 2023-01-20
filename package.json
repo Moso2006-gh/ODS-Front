@@ -25,6 +25,7 @@
     "serve": "webpack serve --host 0.0.0.0"
   },
   "dependencies": {
+    "canvas": "^2.11.0",
     "firebase": "^9.15.0",
     "html-loader": "^4.2.0",
     "jquery": "^3.6.3"

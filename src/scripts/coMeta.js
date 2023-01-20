@@ -1,12 +1,17 @@
 import $ from "jquery";
 import { getCometaDoc, getImageFromID, updateCometa, uploadImage } from "../utils/firebase.utils";
 import upload from "../img/cloudIcon.png"
+import { createFinishedCometa } from "../utils/general.utils";
 
 export default async function coMetaScript () {
     const cometaID = new URLSearchParams(window.location.search).get('co-meta');
 
     const cometaDoc = await getCometaDoc(cometaID)
-    const cometaObj = cometaDoc._document.data.value.mapValue.fields
+    const cometaObj = cometaDoc._document.data.value.mapValue.fields;
+    
+    const nImages = parseInt(cometaObj.totalImages.integerValue);
+    const grid = cometaObj.grid.mapValue.fields;
+
     let cometaImages = [
         [],
         [],
@@ -15,24 +20,28 @@ export default async function coMetaScript () {
     ]
     let lastTouched = [];
     
-    Object.keys(cometaObj).forEach(async (row) => {
+    Object.keys(grid).forEach(async (row) => {
         const r = row.split('Rows')[1] - 1;
         
-        await cometaObj[row].arrayValue.values.forEach( async (el, e) => {
+        await grid[row].arrayValue.values.forEach( async (el, e) => {
             cometaImages[r].push(el.stringValue);
 
             const div = $('.cometaRow')[r].children[e];
             if(el.stringValue === '') {
                 div.children[0].src = upload;
 
-                div.children[0].addEventListener('click', (event) => {
+                div.addEventListener('click', (event) => {
                     $('#uploadB').trigger('click');
-                    console.log(event);
+                    const obj = event.target.nodeName === 'IMG' ? event.target.parentElement : event.target;
+                    console.log(event.target.nodeName);
+
+                    console.log(obj);
                     const cords = [
-                        parseInt(event.path[2].id.split("Row")[1]) - 1,
-                        parseInt(event.path[1].classList[1].split('Element')[1]) - 1
+                        parseInt(obj.parentElement.id.split("Row")[1]) - 1,
+                        parseInt(obj.classList[1].split('Element')[1]) - 1
                     ]
 
+                    console.log('new Cords: ', cords);
                     lastTouched = cords;
                 })
             }
@@ -43,13 +52,20 @@ export default async function coMetaScript () {
         })
     })
 
+    if(nImages === 16) createFinishedCometa(cometaID, cometaImages)
+
     async function uploadCometaTrigger() {
+        console.log('starting upload Commeta');
         const uploadedImage = $(this)[0].files[0];
         const path = await uploadImage(uploadedImage);
-        
+        console.log('image uploading');
+
         const newCometaObj = cometaImages;
         newCometaObj[lastTouched[0]][lastTouched[1]] = path;
-        await updateCometa(cometaID, newCometaObj);
+        await updateCometa(cometaID, newCometaObj, nImages + 1);
+        console.log('commeta updated');
+        console.log('reloading');
+        
         window.location.reload();
     }
     $('#uploadB').change(uploadCometaTrigger);
