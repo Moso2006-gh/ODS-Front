@@ -1,5 +1,5 @@
-import {createCanvas, loadImage} from 'canvas';
-import { getImageFromID } from './firebase.utils';
+import $ from "jquery";
+import { uploadFinishedCometa } from "./firebase.utils";
 
 export function generateUuid () {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (character) => {
@@ -10,28 +10,34 @@ export function generateUuid () {
     });
 };
 
-export async function createFinishedCometa (ID, finishedCometa) {
-    const canvas = createCanvas(2048, 2048);
-    const ctx = canvas.getContext('2d');
+export async function createFinishedCometa (ID) {
+    console.log('building Finished');
+    const canvas = document.getElementById('FinalCanvas'); 
+    canvas.width = 2048; canvas.height  = 2048; 
+    const ctx = canvas.getContext("2d");
 
-    for (let r = 0; r < finishedCometa.length; r++) {
-        const row = finishedCometa[r];
-        for (let el = 0; el < row.length; el++) {
-            const element = row[el];
-
-            const url = await getImageFromID(element);
-            const image = new Image();
-            image.crossOrigin = "anonymous";
-            image.src = url;
+    for (let r = 0; r < 4; r++) {
+        for (let el = 0; el < 4; el++) {
+            
+            const url = $('.cometaRow')[r].children[el].children[0].getAttribute('src')
+            console.log($('.cometaRow')[r].children[el].children[0], url);
+            const image = await new Promise((resolve, reject) => {
+                const img = new Image();
+                img.setAttribute('crossorigin', 'anonymous');
+                img.onload = () => resolve(img);
+                img.onerror = reject;
+                img.src = url;
+            })
+            
             console.log(image);
-            ctx.drawImage(image, 512, 512);
+            ctx.drawImage(image, el*512, r*512, 512, 512);
         }
         
     }
 
-    document.getElementById('prueba').src = canvas.toDataURL();
-    console.log('a');
-    
-    console.log(finishedCometa);
-    
+    await canvas.toBlob(async (blob) => {
+        let file = new File([blob], "fileName.jpg", { type: "image/jpeg" })
+        console.log(file);
+        await uploadFinishedCometa(ID, file)
+    }, 'image/jpeg');    
 }

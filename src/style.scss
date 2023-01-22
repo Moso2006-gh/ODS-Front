@@ -1,7 +1,22 @@
+#sky{
+    background: url('../src/img/Background-01.png') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+body{
+    overflow: hidden;
+}
+
 #createCometa {
     width: 30vw;
     height: 10vw;
-    font-size: 2rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    background-color: white;
+    border-color: white;
     
 }
 
@@ -25,4 +40,59 @@
             }
         }
     }
+}
+
+#FinalCanvas {
+    position: absolute;
+    top: -10000px;
+}
+#uploadB {
+    position: absolute;
+    top: -30px;
+}
+
+
+$tamano: 13vw;
+$estirar: 15;
+.cometaDiv {
+    position: absolute;
+    z-index: -1;
+    
+    width: $tamano;
+    height: $tamano;
+
+    .mainCometa {
+        position: absolute;
+        width: 100%;
+        transform: skew(-$estirar + deg);
+        border: 3px black solid;
+    }
+
+    .tail {
+        width: 100%;
+        height: auto;
+        position: absolute;
+        
+        $extra:  (calc((1 / 90 * $estirar))) * $tamano ;
+        transform: translate( -($tamano + $extra) + 1vw, $tamano + 0.7vw);
+    }
+}
+
+#createCometaDiv {
+    background-color: rgba(255, 255, 255, 0.884);
+    width: 50vw;
+    height: 40vw;
+    border-radius: 15px;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -110%);
+
+    box-shadow: -4px -3px 45px 21px rgba(255, 255, 255, 0.35);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

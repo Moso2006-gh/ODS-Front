@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, addDoc, collection, getDoc, doc, updateDoc, setDoc } from 'firebase/firestore'
-import { getStorage, getDownloadURL, ref, uploadBytes } from 'firebase/storage'
-import {generateUuid as generateID, createFinishedCometa} from './general.utils'
+import { getStorage, getDownloadURL, ref, uploadBytes, listAll } from 'firebase/storage'
+import {generateUuid as generateID } from './general.utils'
 
 const firebaseConfig = {
   apiKey: "AIzaSyAzkDpWJFGevfrFsJMexQBCNsSgJG0SzPs",
@@ -42,9 +42,9 @@ export const getCometaDoc = async (ID) => {
   }
 }
 
-export const getImageFromID = async (ID) => {
+export const getImageFromID = async (ID, cometa) => {
   try {
-    const url = await getDownloadURL(ref(storage, 'imagenes/' + ID));
+    const url = await getDownloadURL(ref(storage, !cometa ? 'imagenes/' : 'cometas/' + ID));
     return url
   }
   catch (err) {
@@ -55,15 +55,13 @@ export const getImageFromID = async (ID) => {
 export const uploadImage = async (file) => {
   let ID = generateID();
   const reference = ref(storage, 'imagenes/' + ID);
+  console.log(file);
   await uploadBytes(reference, file);
   
   return ID;
 }
 
 export const updateCometa = async(ID, newObject, currentImages) => {
-  if(currentImages === 16) {
-    createFinishedCometa(ID, newObject)
-  }
   await setDoc(doc(db, 'Co-Metas', ID), {
     totalImages: currentImages,
     grid: {
@@ -73,4 +71,31 @@ export const updateCometa = async(ID, newObject, currentImages) => {
       Rows4: newObject[3],
     }
   });
+  console.log('updated: ', currentImages);
+}
+
+export const uploadFinishedCometa = async (ID, finishedCometa) => {
+  try {
+    const reference = ref(storage, 'cometas/' + ID);
+    
+    await uploadBytes(reference, finishedCometa)
+    await setDoc(doc(db, 'Co-Metas', ID), {
+      finished: true
+    });
+  } catch (err) {console.log('couldn\'t upload cometa:', err);}
+}
+
+export const getRandomCometa = async (ID, finishedCometa) => {
+  const reference = ref(storage, 'cometas/');
+  const list = await listAll(reference);
+  const items = list.items;
+
+  if(items.length !== 0) {
+    const index = Math.floor(Math.random() * items.length);
+    const url = await getDownloadURL(items[index]);
+    
+    return url;;
+  }
+  else return null;
+  
 }

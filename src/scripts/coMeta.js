@@ -3,23 +3,38 @@ import { getCometaDoc, getImageFromID, updateCometa, uploadImage } from "../util
 import upload from "../img/cloudIcon.png"
 import { createFinishedCometa } from "../utils/general.utils";
 
-export default async function coMetaScript () {
-    const cometaID = new URLSearchParams(window.location.search).get('co-meta');
+let nImages, grid, cometaID, lastTouched;
+let cometaImages = [
+    [],
+    [],
+    [],
+    [],
+]
 
+export default async function coMetaScript () {
+    cometaID = new URLSearchParams(window.location.search).get('co-meta');
+    
     const cometaDoc = await getCometaDoc(cometaID)
     const cometaObj = cometaDoc._document.data.value.mapValue.fields;
     
-    const nImages = parseInt(cometaObj.totalImages.integerValue);
-    const grid = cometaObj.grid.mapValue.fields;
+    try {
+        nImages = parseInt(cometaObj.totalImages.integerValue);
+        console.log(nImages);
+        grid = cometaObj.grid.mapValue.fields;
+        setUpCometa();
+    }
+    catch {
+        displayFinishedCometa()
+    }
+}
 
-    let cometaImages = [
-        [],
-        [],
-        [],
-        [],
-    ]
-    let lastTouched = [];
-    
+async function displayFinishedCometa() {
+    $('#cometaGrid').remove();
+    const cometaImage = await getImageFromID(cometaID, true);
+    $('#Finishedcometa').src = cometaImage;
+}
+
+async function setUpCometa() {
     Object.keys(grid).forEach(async (row) => {
         const r = row.split('Rows')[1] - 1;
         
@@ -47,26 +62,29 @@ export default async function coMetaScript () {
             }
             else {
                 const newSrc = await getImageFromID(el.stringValue);
-                div.children[0].src = newSrc;
+                if(newSrc !== null) div.children[0].src = newSrc;
             }
         })
     })
+}
 
-    if(nImages === 16) createFinishedCometa(cometaID, cometaImages)
+async function uploadCometaTrigger() {
+    const uploadedImage = $(this)[0].files[0];
+    $('.cometaRow')[lastTouched[0]].children[lastTouched[1]].children[0].setAttribute('src', URL.createObjectURL(uploadedImage))
 
-    async function uploadCometaTrigger() {
-        console.log('starting upload Commeta');
-        const uploadedImage = $(this)[0].files[0];
-        const path = await uploadImage(uploadedImage);
-        console.log('image uploading');
+    const path = await uploadImage(uploadedImage);
 
-        const newCometaObj = cometaImages;
-        newCometaObj[lastTouched[0]][lastTouched[1]] = path;
-        await updateCometa(cometaID, newCometaObj, nImages + 1);
-        console.log('commeta updated');
-        console.log('reloading');
+    const newCometaObj = cometaImages;
+    newCometaObj[lastTouched[0]][lastTouched[1]] = path;
+    
+    if(nImages + 1 === 16) await finishCometa();
+    else await updateCometa(cometaID, newCometaObj, nImages + 1);
+    nImages++;
+}
+$('#uploadB').change(uploadCometaTrigger);
+
+async function finishCometa() {
+    await createFinishedCometa(cometaID)
         
-        window.location.reload();
-    }
-    $('#uploadB').change(uploadCometaTrigger);
+    window.location.reload();
 }
