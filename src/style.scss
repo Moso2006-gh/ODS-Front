@@ -1,18 +1,25 @@
 #sky{
-    background: url('../src/img/Background-01.png') no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: url('../src/img/Background-01.png') no-repeat;
+    z-index: -2;
+    background-size: 100%;
+
+    overflow: hidden;
 }
 
 body{
     overflow: hidden;
+    position: relative;
+    width: 56vh;
+    height: 100vh;
+    margin: auto;
 }
 
 #createCometa {
-    width: 30vw;
-    height: 10vw;
+    width: 70%;
+    height: 30%;
     font-size: 1rem;
     border-radius: 6px;
     background-color: white;
@@ -29,8 +36,8 @@ body{
         display: flex;
 
         .cometaElement {
-            width: 20vw;
-            height: 20vw;
+            width: 20%;
+            height: 20%;
             border: 3px solid black;
             margin: 10px;
 
@@ -44,15 +51,15 @@ body{
 
 #FinalCanvas {
     position: absolute;
-    top: -10000px;
+    top: -5000px;
 }
 #uploadB {
     position: absolute;
-    top: -30px;
+    top: -100px;
 }
 
 
-$tamano: 13vw;
+$tamano: 13%;
 $estirar: 15;
 .cometaDiv {
     position: absolute;
@@ -73,18 +80,17 @@ $estirar: 15;
         height: auto;
         position: absolute;
         
-        $extra:  (calc((1 / 90 * $estirar))) * $tamano ;
-        transform: translate( -($tamano + $extra) + 1vw, $tamano + 0.7vw);
+        transform: translate(-104%, 150%);
     }
 }
 
 #createCometaDiv {
     background-color: rgba(255, 255, 255, 0.884);
-    width: 50vw;
-    height: 40vw;
+    width: 70%;
+    height: 30%;
     border-radius: 15px;
 
-    position: fixed;
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -110%);

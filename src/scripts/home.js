@@ -4,7 +4,8 @@ import { createCometaDoc, getRandomCometa } from '../utils/firebase.utils';
 export default function homeScript() {
     async function createCoMeta() {
         const id = await createCometaDoc()
-        $('#yourCometa').html('Your cometa is: ' + 'http://localhost:8080/CoMeta.html?co-meta=' + id)
+        let loc = window.location.href.replace(/home.html/, '');;
+        $('#yourCometa').html('Your cometa is: ' + loc + 'CoMeta.html?co-meta=' + id)
     }
 
     $('#createCometa').on('click', createCoMeta)
