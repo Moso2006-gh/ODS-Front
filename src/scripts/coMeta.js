@@ -1,3 +1,5 @@
+import '../pages/styles/CoMeta.scss'
+
 import $ from "jquery";
 import { getCometaDoc, getImageFromID, updateCometa, uploadImage } from "../utils/firebase.utils";
 import upload from "../img/cloudIcon.png"
@@ -5,8 +7,6 @@ import { createFinishedCometa } from "../utils/general.utils";
 
 let nImages, grid, cometaID, lastTouched;
 let cometaImages = [
-    [],
-    [],
     [],
     [],
 ]
@@ -19,8 +19,8 @@ export default async function coMetaScript () {
     
     try {
         nImages = parseInt(cometaObj.totalImages.integerValue);
-        console.log(nImages);
         grid = cometaObj.grid.mapValue.fields;
+
         setUpCometa();
     }
     catch {
@@ -31,7 +31,7 @@ export default async function coMetaScript () {
 async function displayFinishedCometa() {
     $('#cometaGrid').remove();
     const cometaImage = await getImageFromID(cometaID, true);
-    $('#Finishedcometa').src = cometaImage;
+    $('#Finishedcometa')[0].src = cometaImage;
 }
 
 async function setUpCometa() {
@@ -77,14 +77,14 @@ async function uploadCometaTrigger() {
     const newCometaObj = cometaImages;
     newCometaObj[lastTouched[0]][lastTouched[1]] = path;
     
-    if(nImages + 1 === 16) await finishCometa();
+    if(nImages + 1 === 4) await finishCometa();
     else await updateCometa(cometaID, newCometaObj, nImages + 1);
     nImages++;
 }
 $('#uploadB').change(uploadCometaTrigger);
 
 async function finishCometa() {
-    await createFinishedCometa(cometaID)
-        
-    window.location.reload();
+    await createFinishedCometa(cometaID);
+
+    displayFinishedCometa();
 }

@@ -1,3 +1,5 @@
+import '../pages/styles/home.scss'
+
 import $ from "jquery";
 import { createCometaDoc, getRandomCometa } from '../utils/firebase.utils';
 

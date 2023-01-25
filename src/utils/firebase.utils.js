@@ -22,10 +22,8 @@ export const createCometaDoc = async () => {
   const cometaDoc = await addDoc(collection(db, 'Co-Metas'), {
     totalImages: 0,
     grid: {
-      Rows1: ['', '', '', ''],
-      Rows2: ['', '', '', ''],
-      Rows3: ['', '', '', ''],
-      Rows4: ['', '', '', ''],
+      Rows1: ['', '' ],
+      Rows2: ['', '' ],
     }
   });
   return cometaDoc.id;
@@ -44,7 +42,9 @@ export const getCometaDoc = async (ID) => {
 
 export const getImageFromID = async (ID, cometa) => {
   try {
-    const url = await getDownloadURL(ref(storage, !cometa ? 'imagenes/' : 'cometas/' + ID));
+    console.log(!cometa ? 'imagenes/' : 'cometas/');
+    const url = await getDownloadURL(ref(storage, (!cometa ? 'imagenes/' : 'cometas/') + ID));
+    console.log(url);
     return url
   }
   catch (err) {
@@ -67,8 +67,6 @@ export const updateCometa = async(ID, newObject, currentImages) => {
     grid: {
       Rows1: newObject[0],
       Rows2: newObject[1],
-      Rows3: newObject[2],
-      Rows4: newObject[3],
     }
   });
   console.log('updated: ', currentImages);
@@ -82,10 +80,12 @@ export const uploadFinishedCometa = async (ID, finishedCometa) => {
     await setDoc(doc(db, 'Co-Metas', ID), {
       finished: true
     });
+
+    return;
   } catch (err) {console.log('couldn\'t upload cometa:', err);}
 }
 
-export const getRandomCometa = async (ID, finishedCometa) => {
+export const getRandomCometa = async () => {
   const reference = ref(storage, 'cometas/');
   const list = await listAll(reference);
   const items = list.items;

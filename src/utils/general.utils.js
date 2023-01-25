@@ -11,16 +11,14 @@ export function generateUuid () {
 };
 
 export async function createFinishedCometa (ID) {
-    console.log('building Finished');
     const canvas = document.getElementById('FinalCanvas'); 
-    canvas.width = 2048; canvas.height  = 2048; 
+    canvas.width = 1024; canvas.height  = 1024; 
     const ctx = canvas.getContext("2d");
 
-    for (let r = 0; r < 4; r++) {
-        for (let el = 0; el < 4; el++) {
+    for (let r = 0; r < 2; r++) { //Cambio
+        for (let el = 0; el < 2; el++) {
             
             const url = $('.cometaRow')[r].children[el].children[0].getAttribute('src')
-            console.log($('.cometaRow')[r].children[el].children[0], url);
             const image = await new Promise((resolve, reject) => {
                 const img = new Image();
                 img.setAttribute('crossorigin', 'anonymous');
@@ -29,15 +27,19 @@ export async function createFinishedCometa (ID) {
                 img.src = url;
             })
             
-            console.log(image);
-            ctx.drawImage(image, el*512, r*512, 512, 512);
+            await ctx.drawImage(image, el*512, r*512, 512, 512);
+            console.log('d');
         }
         
     }
 
-    await canvas.toBlob(async (blob) => {
-        let file = new File([blob], "fileName.jpg", { type: "image/jpeg" })
-        console.log(file);
-        await uploadFinishedCometa(ID, file)
-    }, 'image/jpeg');    
+    await new Promise((resolve, reject) => {
+        canvas.toBlob(async (blob) => {
+            let file = new File([blob], "fileName.jpg", { type: "image/jpeg" })
+            await uploadFinishedCometa(ID, file)
+            resolve();
+        }, 'image/jpeg');    
+    })
+
+    return;
 }

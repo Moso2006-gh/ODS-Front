@@ -1,0 +1,65 @@
+#sky{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: url('../../img/Background-01.png') no-repeat;
+    z-index: -2;
+    background-size: 100%;
+
+    overflow: hidden;
+}
+
+#createCometa {
+    width: 70%;
+    height: 30%;
+    font-size: 1rem;
+    border-radius: 6px;
+    background-color: white;
+    border-color: white;
+    
+}
+
+$tamano: 13%;
+$estirar: 15;
+.cometaDiv {
+    position: absolute;
+    z-index: -1;
+
+
+    width: $tamano;
+    height: $tamano;
+
+    .mainCometa {
+        position: absolute;
+        width: 100%;
+        transform: skew(-$estirar + deg);
+        border: 3px black solid;
+    }
+
+    .tail {
+        width: 100%;
+        height: auto;
+        position: absolute;
+        
+        transform: translate(-104%, 150%);
+    }
+}
+
+#createCometaDiv {
+    background-color: rgba(255, 255, 255, 0.884);
+    width: 70%;
+    height: 30%;
+    border-radius: 15px;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -110%);
+
+    box-shadow: -4px -3px 45px 21px rgba(255, 255, 255, 0.35);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

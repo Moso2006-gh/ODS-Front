@@ -1,0 +1,39 @@
+#cometaGrid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .cometaRow {
+        display: flex;
+        justify-content: center;
+        .cometaElement {
+            width: 30%;
+            height: 30%;
+            border: 3px solid black;
+            margin: 10px;
+
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+}
+
+#FinalCanvas {
+    position: absolute;
+    top: -5000px;
+}
+#uploadB {
+    position: absolute;
+    top: -100px;
+}
+
+#FinishedcometaDiv {
+    display: flex;
+    justify-content: center;
+    #Finishedcometa {
+        width: 70%;
+        height: auto;
+    }    
+}
