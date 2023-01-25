@@ -11,12 +11,20 @@
 
 #createCometa {
     width: 70%;
-    height: 30%;
+    height: 31.2%;
     font-size: 1rem;
-    border-radius: 6px;
-    background-color: white;
-    border-color: white;
-    
+    background-image: url('../../img/Lanzar\ cometa.png');
+    background-size: 100%;
+    border: 0;
+    border-radius: 15px;
+
+    position: absolute;
+    top: 230%;
+
+    cursor: pointer;
+    &:hover {
+        filter: brightness(90%);
+    }
 }
 
 $tamano: 13%;
