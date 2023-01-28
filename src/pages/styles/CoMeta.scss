@@ -1,4 +1,7 @@
 #cometaGrid {
+    position: absolute;
+    width: 100%;
+    top: 25vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -7,14 +10,31 @@
         display: flex;
         justify-content: center;
         .cometaElement {
-            width: 30%;
-            height: 30%;
-            border: 3px solid black;
-            margin: 10px;
+            width: 15vh;
+            height: 15vh;
+            border-style : Dashed;
+            border-color : var(--clr);
+            border-color : var(--clr);
+            border-width : 0.7vh;
+            border-radius: 1vh;
+            margin: 1vh;
 
             img {
                 width: 100%;
                 height: 100%;
+                &#el1 {
+                    filter: invert(49%) sepia(48%) saturate(4894%) hue-rotate(351deg) brightness(105%) contrast(90%);
+                }
+                &#el2 {
+                    filter: invert(57%) sepia(91%) saturate(284%) hue-rotate(41deg) brightness(98%) contrast(89%);
+                }
+                &#el3 {
+                    filter: invert(75%) sepia(63%) saturate(784%) hue-rotate(339deg) brightness(103%) contrast(99%);
+                }
+                &#el4 {
+                    filter: invert(62%) sepia(55%) saturate(646%) hue-rotate(129deg) brightness(89%) contrast(84%);
+                }
+                
             }
         }
     }
@@ -30,10 +50,94 @@
 }
 
 #FinishedcometaDiv {
+    position: absolute;
+    top: 26vh;
+    left: -1vh;
     display: flex;
     justify-content: center;
     #Finishedcometa {
-        width: 70%;
+        width: 65%;
         height: auto;
     }    
+}
+
+#uploadScreen {
+    background-color: #cceeff;
+    position: relative;
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -54%);
+
+    width: 45vh;
+    height: 80vh;
+    border-radius: 5vh; 
+
+    #theme {
+        $innerSize: 18vh;
+        $difference: 3vh;
+        .ring {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 1000px;
+            border: #64c6dd 0.8vh solid;
+            &#inner {
+                top: 4.5vh;
+                width: $innerSize;
+                height: $innerSize;
+            }
+
+            &#outer {
+                top: 3vh;
+                width: $innerSize + $difference;
+                height: $innerSize + $difference;
+            }
+        }
+
+        img {
+            position: absolute;
+            width: $innerSize - 4;
+            height: auto;
+            top: 8vh;
+
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    }
+}
+
+#background {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: url('../../img/FondoCoMetas-01.png') no-repeat;
+    z-index: -2;
+    background-size: 100% 100%;
+    object-fit: cover;
+}
+
+#compartir {
+    width: 29.5vh;
+    height: 10vh;
+    position: absolute;
+    top: 75vh;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: transparent;
+    border: 0;
+    background-size: cover;
+
+
+    background-image: url('../../img/button/sipuedes.png');
+
+    &:hover:not([disabled]) {
+        filter: brightness(90%);
+        cursor: pointer;
+    }
+
+    &[disabled] {
+        background-image: url('../../img/button/nopuedes.png');    
+    }
 }

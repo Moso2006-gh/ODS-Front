@@ -78,6 +78,7 @@ export const uploadFinishedCometa = async (ID, finishedCometa) => {
     
     await uploadBytes(reference, finishedCometa)
     await setDoc(doc(db, 'Co-Metas', ID), {
+      totalImages: 4,
       finished: true
     });
 

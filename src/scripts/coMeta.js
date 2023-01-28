@@ -16,17 +16,28 @@ export default async function coMetaScript () {
     
     const cometaDoc = await getCometaDoc(cometaID)
     const cometaObj = cometaDoc._document.data.value.mapValue.fields;
+    nImages = parseInt(cometaObj.totalImages.integerValue);
     
     try {
-        nImages = parseInt(cometaObj.totalImages.integerValue);
         grid = cometaObj.grid.mapValue.fields;
-
         setUpCometa();
     }
     catch {
         displayFinishedCometa()
     }
+
+    if(nImages > 0) $('#compartir').prop("disabled", false);
+    $('#compartir').on('click', compartir)
 }
+
+function compartir() {
+    if(navigator.share) {
+        navigator.share({ title: "CoMeta", text:"contribuye a mi cometa con tu arte !!", url: window.location.href })
+    }
+    else {
+        navigator.clipboard.writeText(window.location.href);
+    }
+} 
 
 async function displayFinishedCometa() {
     $('#cometaGrid').remove();
@@ -45,46 +56,49 @@ async function setUpCometa() {
             if(el.stringValue === '') {
                 div.children[0].src = upload;
 
-                div.addEventListener('click', (event) => {
-                    $('#uploadB').trigger('click');
-                    const obj = event.target.nodeName === 'IMG' ? event.target.parentElement : event.target;
-                    console.log(event.target.nodeName);
-
-                    console.log(obj);
-                    const cords = [
-                        parseInt(obj.parentElement.id.split("Row")[1]) - 1,
-                        parseInt(obj.classList[1].split('Element')[1]) - 1
-                    ]
-
-                    console.log('new Cords: ', cords);
-                    lastTouched = cords;
-                })
+                div.addEventListener('click', clickOnUploadImg)
             }
             else {
                 const newSrc = await getImageFromID(el.stringValue);
                 if(newSrc !== null) div.children[0].src = newSrc;
+                div.children[0].removeAttribute('id')
             }
         })
     })
 }
-
-async function uploadCometaTrigger() {
-    const uploadedImage = $(this)[0].files[0];
-    $('.cometaRow')[lastTouched[0]].children[lastTouched[1]].children[0].setAttribute('src', URL.createObjectURL(uploadedImage))
-
-    const path = await uploadImage(uploadedImage);
-
-    const newCometaObj = cometaImages;
-    newCometaObj[lastTouched[0]][lastTouched[1]] = path;
-    
-    if(nImages + 1 === 4) await finishCometa();
-    else await updateCometa(cometaID, newCometaObj, nImages + 1);
-    nImages++;
-}
-$('#uploadB').change(uploadCometaTrigger);
 
 async function finishCometa() {
     await createFinishedCometa(cometaID);
 
     displayFinishedCometa();
 }
+
+
+function clickOnUploadImg(event) {
+    $('#uploadB').trigger('click');
+    const obj = event.target.nodeName === 'IMG' ? event.target.parentElement : event.target;
+    const cords = [
+        parseInt(obj.parentElement.id.split("Row")[1]) - 1,
+        parseInt(obj.classList[1].split('Element')[1]) - 1
+    ]
+    lastTouched = cords;
+}
+
+async function uploadButtonTrigger() {
+    if(nImages === 0) $('#compartir').prop("disabled", false);
+
+    const uploadedImage = $(this)[0].files[0];
+    const imageObj = $('.cometaRow')[lastTouched[0]].children[lastTouched[1]].children[0]
+    imageObj.setAttribute('src', URL.createObjectURL(uploadedImage))
+    imageObj.removeAttribute('id');
+
+    const path = await uploadImage(uploadedImage);
+
+    const newCometaObj = cometaImages;
+    newCometaObj[lastTouched[0]][lastTouched[1]] = path;
+    
+    nImages++;
+    if(nImages === 4) await finishCometa();
+    else await updateCometa(cometaID, newCometaObj, nImages);
+}
+$('#uploadB').on('change', uploadButtonTrigger);

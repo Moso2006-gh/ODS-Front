@@ -3,24 +3,26 @@
     <head>
         <meta charset="utf-8" />
         <title>Co-Metas</title>
+        <meta name="description" content="Comparte tu arte con el mundo y ayuda a crear un mejor planeta"/>
+        <meta property="og:title" content="Co-Metas"/>
+        <meta property="og:image" content="../img/cloudIcon.png" />
     </head>
     <body>
-        <h1>Hello world!</h1>
         <div id="cometaGrid">
             <div id="Row1" class="cometaRow">
-                <div class="cometaElement Element1">
-                    <img>
+                <div class="cometaElement Element1" style="--clr: #F26522">
+                    <img id="el1">
                 </div>
-                <div class="cometaElement Element2">
-                    <img>
+                <div class="cometaElement Element2" style="--clr: #8CB844">
+                    <img id="el2">
                 </div>
             </div>
             <div id="Row2" class="cometaRow">
-                <div class="cometaElement Element1">
-                    <img>
+                <div class="cometaElement Element1" style="--clr: #FEBD22">
+                    <img id="el3">
                 </div>
-                <div class="cometaElement Element2">
-                    <img>
+                <div class="cometaElement Element2" style="--clr: #19BCB7">
+                    <img id="el4">
                 </div>
             </div>
             </div>
@@ -30,6 +32,20 @@
         </div>
         <input id="uploadB" type = "file" name="uploadImage" accept = "image/*" />
         <canvas id="FinalCanvas"></canvas>
-    </body>
-    
+
+        <!-- <div id="uploadScreen">
+            <div id="theme">
+                <div class="ring" id="inner"></div>
+                <div class="ring" id="outer"></div>
+
+                <img src="../img/logos/Paloma.png"/>
+            </div>
+            <div id="chooseImageDiv"></div>
+            <div id="formDiv"></div>
+            <button></button>
+        </div> -->
+
+        <button id="compartir" disabled></button>
+        <div id="background"></div>
+    </body>  
 </html>
