@@ -11,7 +11,7 @@
     overflow: hidden;
 }
 
-$mult: 1.3;
+$mult: 1.6;
 #createCometa {
     font-size: 1rem;
     background-color: transparent;
@@ -21,7 +21,9 @@ $mult: 1.3;
     background-size: cover;
     border: 0;
     position: absolute;
-    top: 130%;
+    top: 40%;
+    left: 50%;
+    transform: translateX(-50%);
 
     cursor: pointer;
     &:hover {

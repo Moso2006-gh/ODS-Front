@@ -40,6 +40,10 @@ function compartir() {
 } 
 
 async function displayFinishedCometa() {
+    $('#cometaText').text("Felicidades la cometa está completa !!")
+    $('#cometaText').css('color', "#040327")    
+    $('#background').addClass('Finished')
+
     $('#cometaGrid').remove();
     const cometaImage = await getImageFromID(cometaID, true);
     $('#Finishedcometa')[0].src = cometaImage;

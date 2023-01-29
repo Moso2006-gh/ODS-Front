@@ -1,3 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+
+body {
+    overflow: hidden;
+}
+
+#cometaText {
+    position: absolute;
+    top: 11%;
+    left: 50%;
+    width: 70%;
+    transform: translateX(-50%);
+    font-size: 4em;
+    font-family: 'Varela Round', sans-serif;
+    text-align: center;
+    color: #092602;
+}
+
 #cometaGrid {
     position: absolute;
     width: 100%;
@@ -116,6 +134,10 @@
     z-index: -2;
     background-size: 100% 100%;
     object-fit: cover;
+
+    &.Finished {
+        background-image: url('../../img/FondoCoMetaLanzada-01.png');
+    }
 }
 
 #compartir {
