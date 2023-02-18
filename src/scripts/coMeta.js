@@ -2,7 +2,6 @@ import '../pages/styles/CoMeta.scss'
 
 import $ from "jquery";
 import { getCometaDoc, getImageFromID, updateCometa, uploadImage } from "../utils/firebase.utils";
-import upload from "../img/cloudIcon.png"
 import { createFinishedCometa } from "../utils/general.utils";
 
 let nImages, grid, cometaID, lastTouched;
@@ -28,11 +27,12 @@ export default async function coMetaScript () {
 
     if(nImages > 0) $('#compartir').prop("disabled", false);
     $('#compartir').on('click', compartir)
+    $('#galeriaB').on('click', () => window.location.href = window.location.href.split('/')[0] + '/home.html')
 }
 
 function compartir() {
     if(navigator.share) {
-        navigator.share({ title: "CoMeta", text:"contribuye a mi cometa con tu arte !!", url: window.location.href })
+        navigator.share({ title: "CoMeta", text:" ¡¡contribuye a mi cometa con tu arte!!", url: window.location.href })
     }
     else {
         navigator.clipboard.writeText(window.location.href);
@@ -40,7 +40,7 @@ function compartir() {
 } 
 
 async function displayFinishedCometa() {
-    $('#cometaText').text("Felicidades la cometa está completa !!")
+    $('#cometaText').text("¡Felicidades, habeís lanzado vuestra cometa!")
     $('#cometaText').css('color', "#040327")    
     $('#background').addClass('Finished')
 
@@ -58,8 +58,6 @@ async function setUpCometa() {
 
             const div = $('.cometaRow')[r].children[e];
             if(el.stringValue === '') {
-                div.children[0].src = upload;
-
                 div.addEventListener('click', clickOnUploadImg)
             }
             else {

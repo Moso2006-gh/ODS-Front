@@ -21,7 +21,6 @@ const speed = 2;
 
 function animateCometas() {
     const newDate = new Date();
-    const deltaTime = (newDate - oldDate) / 10;
     oldDate = newDate;
 
     if((newDate - lastCometa) / 1000 > 1) {
@@ -31,7 +30,6 @@ function animateCometas() {
 
     const cometasToupdate = $('.cometaDiv')
     cometasToupdate.toArray() .forEach(cometa => {
-        const rawTransform = $(cometa).css('transform').split(',');
         let pos = [
             parseInt($(cometa).css('left')),
             parseInt($(cometa).css('bottom'))
