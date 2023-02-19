@@ -31,7 +31,7 @@ $mult: 1.6;
     }
 }
 
-$tamano: 13%;
+$tamano: 20%;
 $estirar: 15;
 .cometaDiv {
     position: absolute;
@@ -45,14 +45,15 @@ $estirar: 15;
         position: absolute;
         width: 100%;
         transform: skew(-$estirar + deg);
-        border: 3px black solid;
+        border: .5vh #8e4736 solid;
     }
 
     .tail {
         width: 100%;
         height: auto;
         position: absolute;
-        
+        filter: invert(33%) sepia(31%) saturate(877%) hue-rotate(324deg) brightness(93%) contrast(99%);
+
         transform: translate(-104%, 150%);
     }
 }
